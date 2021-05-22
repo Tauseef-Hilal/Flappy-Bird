@@ -2,7 +2,11 @@
     Bird class
 """
 
+from os import path
 import pygame
+
+pygame.mixer.init()
+GAME_OVER_SOUND = pygame.mixer.Sound(path.join("sfx", "hit.wav"))
 
 
 class Bird:
@@ -25,16 +29,27 @@ class Bird:
         self.vel = 0                            # Initial velcocity
         self.max_vel = -8                       # Jump Velocity
         self.clicked = False
+        self.times = 0
+        self.flying = False
     
-    def draw(self, surf):
+    def draw(self, surf, game_over):
         """Display the bird"""
-        self._animate()
+        if not game_over:
+            self._animate()
+        else:
+            if self.times == 0:
+                self.current_img = pygame.transform.rotate(self.current_img,
+                                                          -90)
+                GAME_OVER_SOUND.play()
+                self.times = 1
+        
         surf.blit(self.current_img, self.rect.center)
 
         if self.clicked:
             self._jump()
         else:
-            self._apply_gravity()
+            if self.flying:
+                self._apply_gravity()
     
     def _animate(self):
         """Animate the bird"""
