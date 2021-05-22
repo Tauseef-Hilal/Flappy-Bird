@@ -50,15 +50,17 @@ pygame.font.init()
 FONT_COLOR = (255, 255, 255)
 FONT = pygame.font.SysFont("Secular One", 70, bold=True)
 
-# Backgrounds
+# Background and Menu
 BACKGROUND = pygame.image.load(path.join("sprites", "background.png"))
+MENU = pygame.image.load(path.join("sprites", "message.png"))
+MENU = pygame.transform.scale(MENU, (300, 400))
 
 
 def draw_score(score):
     """Display score"""
 
     FONT_IMG = FONT.render(score, True, FONT_COLOR)
-    WIN.blit(FONT_IMG, (WIDTH/2 - 50, 20))
+    WIN.blit(FONT_IMG, (WIDTH/2 - 30, 20))
 
 
 def reset_game():
@@ -119,14 +121,21 @@ def draw(game_over, score, ready, action=False) -> bool:
     WIN.blit(BACKGROUND, (0, 0))
 
     if ready:
+        # Display pipes
         for pipe in pipes:
             pipe.draw(WIN, game_over)
 
-    # Display score
-    draw_score(str(score))
+        # Display score
+        draw_score(str(score))
+
+        # Display bird
+        BIRD.draw(WIN, game_over)
     
-    GROUND.draw(WIN, game_over)
-    BIRD.draw(WIN, game_over)
+    # Display ground
+    GROUND.draw(WIN, game_over or not ready)
+
+    if not ready:
+        WIN.blit(MENU, (WIDTH/2 - 150, HEIGHT/2 - 230))
     
     if game_over:
         WIN.blit(GAME_OVER_IMG, (WIDTH/2 - 96, HEIGHT/2 - 21))
