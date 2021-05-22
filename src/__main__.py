@@ -43,7 +43,7 @@ pipe_delay = 75
 # Game over image and Button image, obj
 GAME_OVER_IMG = pygame.image.load(path.join("sprites", "gameover.png"))
 BTN_IMG = pygame.image.load(path.join("sprites", "btn.png"))
-BUTTON = Button((WIDTH/2 - 60, HEIGHT/2 + 25), BTN_IMG)
+BUTTON = Button((WIDTH/2 - 60, HEIGHT/2 - 50), BTN_IMG)
 
 # FONT
 pygame.font.init()
@@ -60,7 +60,7 @@ def draw_score(score):
     """Display score"""
 
     FONT_IMG = FONT.render(score, True, FONT_COLOR)
-    WIN.blit(FONT_IMG, (WIDTH/2 - 30, 20))
+    WIN.blit(FONT_IMG, (WIDTH/2 - 20, 20))
 
 
 def reset_game():
@@ -138,7 +138,7 @@ def draw(game_over, score, ready, action=False) -> bool:
         WIN.blit(MENU, (WIDTH/2 - 150, HEIGHT/2 - 230))
     
     if game_over:
-        WIN.blit(GAME_OVER_IMG, (WIDTH/2 - 96, HEIGHT/2 - 21))
+        WIN.blit(GAME_OVER_IMG, (WIDTH/2 - 96, HEIGHT/2 - 100))
         action = BUTTON.draw(WIN)
         
     pygame.display.update()

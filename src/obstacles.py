@@ -54,7 +54,7 @@ class Pipe(Obstacle):
     def __init__(self, img_path, coords, flip=False):
         super().__init__(img_path, coords)
         self.x, self.y = self.coords
-        gap = 150
+        gap = 160
         
         if flip:
             self.img = pygame.transform.flip(self.img, False, True)

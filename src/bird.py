@@ -17,6 +17,7 @@ class Bird:
 
         for i in range(3):
             image = pygame.image.load(img_path.format(color, i))
+            image = pygame.transform.scale(image, (50, 35))
             self.images.append(image)
         
         self.rect = self.images[0].get_rect()
