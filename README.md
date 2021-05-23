@@ -5,11 +5,14 @@ __A basic Flappy-Bird clone written in Python and Pygame.__
 
 > By `Tauseef Hilal Tantary`. *A beginner Python Programmer.*
 
+## Features
+* Game speed increases in intervals!
+* I don't know (LOL)
 
 ## System Requirements
 * **OS**: Any
-* **RAM**: ~ ...
-* **ROM**: ~ ...
+* **RAM**: ~ 22 MB
+* **ROM**: ~ 81 MB
 * ***Python and other dependencies must be installed!***
 
 
