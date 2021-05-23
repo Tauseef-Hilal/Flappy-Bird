@@ -38,7 +38,6 @@ BIRD = Bird(path.join("sprites", "{}-{}.png"),
 # Pipes
 pipes = []
 pipe_img = path.join("sprites", "pipe-green.png")
-pipe_delay = 75
 
 # Game over image and Button image, obj
 GAME_OVER_IMG = pygame.image.load(path.join("sprites", "gameover.png"))
@@ -76,10 +75,10 @@ def reset_game():
     BIRD.rect.topleft = (200, 300)
     BIRD.times = 0  
 
-    return False, 0
+    return False, 0, 70
 
 
-def create_pipes(pipe_counter):
+def create_pipes(pipe_counter, pipe_delay):
     """
         Create pipe objs
 
@@ -95,7 +94,7 @@ def create_pipes(pipe_counter):
         of the game!
     """
 
-    if pipe_counter == pipe_delay or pipe_counter == -1:
+    if pipe_counter >= pipe_delay or pipe_counter == -1:
         pipe_height = randint(-180, 20)
         flip = False
 
@@ -133,6 +132,7 @@ def draw(game_over, score, ready, action=False) -> bool:
     
     # Display ground
     GROUND.draw(WIN, game_over or not ready)
+    GROUND.check_scroll()
 
     if not ready:
         WIN.blit(MENU, (WIDTH/2 - 150, HEIGHT/2 - 230))
@@ -151,7 +151,9 @@ def main():
     pipe_counter = -1
     game_over = False
     pipe_crossed = False
+    pipe_delay = 70
     score = 0
+    score_gained = 0
 
     ready = False
     game_on = True
@@ -159,7 +161,7 @@ def main():
         
         # Create and draw pipes
         if not game_over and ready:
-            pipe_counter = create_pipes(pipe_counter)
+            pipe_counter = create_pipes(pipe_counter, pipe_delay)
         
         # Check it crossed a pipe
         if len(pipes) > 0:
@@ -173,6 +175,13 @@ def main():
             if pipe_crossed == True:
                 if BIRD.rect.left > pipes[0].rect.right:
                     score += 5
+                    score_gained += 5
+
+                    if score_gained == 10:
+                        score_gained = 0
+                        GROUND.__class__.__base__.scroll_speed += 1
+                        pipe_delay -= 1.25
+                        print(pipe_delay)
                     pipe_crossed = False
                     SCORE_SCOUND.play()
 
@@ -184,6 +193,7 @@ def main():
                 or BIRD.rect.bottom >= 490 \
                 or BIRD.rect.top <= 0:
                     game_over = True
+                    GROUND.__class__.__base__.scroll_speed = 4
                     pygame.mixer.music.stop()
                     break
 
@@ -209,7 +219,7 @@ def main():
         
         # Display the game
         if draw(game_over, score, ready):
-            game_over, score = reset_game()
+            game_over, score, pipe_delay = reset_game()
 
 
 if __name__ == "__main__":
