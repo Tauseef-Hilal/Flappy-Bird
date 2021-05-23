@@ -2,7 +2,7 @@
     __main__.py
 """
 
-from os import path
+from os import path, mkdir
 from random import choice, randint
 import pygame
 from src.obstacles import Ground, Pipe
@@ -168,6 +168,8 @@ def main():
         with open(path.join("score", "high.txt")) as h_score:
             high_score = int(h_score.read())
     except FileNotFoundError:
+        if not path.exists("score"):
+            mkdir("score")
         with open(path.join("score", "high.txt"), mode="w") as h_score:
             h_score.write("0")
             high_score = 0
