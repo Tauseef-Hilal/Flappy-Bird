@@ -142,8 +142,14 @@ def draw(game_over, score, ready, woohoo, action=False) -> bool:
 
         # Update score file if player makes a new record
         if woohoo:
-            with open(path.join("score", "high.txt"), mode="w") as score_file:
-                score_file.write(str(score))
+            try:
+                with open(path.join("score", "high.txt"), mode="w") as score_file:
+                    score_file.write(str(score))
+            except FileNotFoundError:
+                if not path.exists("score"):
+                    mkdir("score")
+                with open(path.join("score", "high.txt"), mode="w") as score_file:
+                    score_file.write(str(score))
         
         WIN.blit(GAME_OVER_IMG, (WIDTH/2 - 96, HEIGHT/2 - 100))
         action = BUTTON.draw(WIN)
