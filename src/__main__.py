@@ -179,9 +179,8 @@ def main():
 
                     if score_gained == 10:
                         score_gained = 0
-                        GROUND.__class__.__base__.scroll_speed += 1
-                        pipe_delay -= 1.25
-                        print(pipe_delay)
+                        GROUND.__class__.__base__.scroll_speed += 0.05
+                        pipe_delay -= 0.3
                     pipe_crossed = False
                     SCORE_SCOUND.play()
 
