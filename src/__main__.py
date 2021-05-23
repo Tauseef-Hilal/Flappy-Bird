@@ -25,6 +25,7 @@ pygame.mixer.music.load(path.join("music", "background.mp3"))
 pygame.mixer.music.play(-1)
 
 SCORE_SCOUND = pygame.mixer.Sound(path.join("sfx", "point.wav"))
+HIGH_SCORE_SOUND = pygame.mixer.Sound(path.join("sfx", "woohoo.wav"))
 
 # Ground
 GROUND = Ground(path.join("sprites", "base.png"), (0, HEIGHT-168))
@@ -75,7 +76,7 @@ def reset_game():
     BIRD.rect.topleft = (200, 300)
     BIRD.times = 0  
 
-    return False, 0, 70
+    return False, 0, 70, False
 
 
 def create_pipes(pipe_counter, pipe_delay):
@@ -112,7 +113,7 @@ def create_pipes(pipe_counter, pipe_delay):
     return pipe_counter
 
 
-def draw(game_over, score, ready, action=False) -> bool:
+def draw(game_over, score, ready, woohoo, action=False) -> bool:
     """
         Draw game objs
     """
@@ -138,6 +139,12 @@ def draw(game_over, score, ready, action=False) -> bool:
         WIN.blit(MENU, (WIDTH/2 - 150, HEIGHT/2 - 230))
     
     if game_over:
+
+        # Update score file if player makes a new record
+        if woohoo:
+            with open(path.join("score", "high.txt"), mode="w") as score_file:
+                score_file.write(str(score))
+        
         WIN.blit(GAME_OVER_IMG, (WIDTH/2 - 96, HEIGHT/2 - 100))
         action = BUTTON.draw(WIN)
         
@@ -151,9 +158,19 @@ def main():
     pipe_counter = -1
     game_over = False
     pipe_crossed = False
+    woohoo = False
     pipe_delay = 70
     score = 0
     score_gained = 0
+
+    # Read score from the score file
+    try:
+        with open(path.join("score", "high.txt")) as h_score:
+            high_score = int(h_score.read())
+    except FileNotFoundError:
+        with open(path.join("score", "high.txt"), mode="w") as h_score:
+            h_score.write("0")
+            high_score = 0
 
     ready = False
     game_on = True
@@ -181,8 +198,18 @@ def main():
                         score_gained = 0
                         GROUND.__class__.__base__.scroll_speed += 0.05
                         pipe_delay -= 0.3
+                    
+                    if score > high_score:
+                        high_score = score
+                        if not woohoo:
+                            HIGH_SCORE_SOUND.play()
+                            woohoo = True
+                        else:
+                            SCORE_SCOUND.play()
+                    else:
+                        SCORE_SCOUND.play()
+                    
                     pipe_crossed = False
-                    SCORE_SCOUND.play()
 
         if len(pipes) > 0:
 
@@ -217,8 +244,8 @@ def main():
 
         
         # Display the game
-        if draw(game_over, score, ready):
-            game_over, score, pipe_delay = reset_game()
+        if draw(game_over, score, ready, woohoo):
+            game_over, score, pipe_delay, woohoo = reset_game()
 
 
 if __name__ == "__main__":
