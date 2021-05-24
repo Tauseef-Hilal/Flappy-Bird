@@ -28,7 +28,7 @@ class Obstacle:
             self.rect.x -= Obstacle.scroll_speed
     
     def __repr__(self):
-        return f"<Obstacle @ {self.coords}>"
+        return f"<Obstacle __init__@ {self.coords}>"
 
 
 class Ground(Obstacle):
@@ -39,7 +39,7 @@ class Ground(Obstacle):
             self.rect.x += 35
 
     def __repr__(self):
-        return f"<Obstacle => Ground @ {self.coords}>"
+        return f"<Obstacle => Ground __init__@ {self.coords}>"
 
 
 class Pipe(Obstacle):
@@ -58,4 +58,4 @@ class Pipe(Obstacle):
             self.rect.topleft = (self.x), (self.y + (gap/2))
         
     def __repr__(self):
-        return f"<Obstacle => Pipe @ {self.coords}>"
+        return f"<Obstacle => Pipe __init__@ {self.coords}>"

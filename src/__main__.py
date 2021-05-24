@@ -232,8 +232,8 @@ def main():
                     break
 
             # Delete pipes that crossed the window
-                if pipes[0].rect.right < 0:
-                    del pipes[0]
+            if pipes[0].rect.right < 0:
+                del pipes[0]
             
         # Handle events
         for event in pygame.event.get():
