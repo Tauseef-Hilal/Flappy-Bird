@@ -242,10 +242,10 @@ def main():
                 game_on = False
                 pygame.quit()
             
-            if event.type == pygame.MOUSEBUTTONUP and not game_over:
+            if (event.type == pygame.MOUSEBUTTONUP or event.type == pygame.KEYUP) and not game_over:
                 BIRD.clicked = True
             
-            if event.type == pygame.MOUSEBUTTONUP and not game_over \
+            if (event.type == pygame.MOUSEBUTTONUP or event.type == pygame.KEYUP) and not game_over \
                 and not ready:
                 ready = True
                 BIRD.flying = True
