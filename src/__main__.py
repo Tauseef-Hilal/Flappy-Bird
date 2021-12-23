@@ -34,7 +34,7 @@ GROUND = Ground(path.join("sprites", "base.png"), (0, HEIGHT-168))
 BIRDS = ["redbird", "bluebird", "yellowbird"]
 COLOR = choice(BIRDS)
 BIRD = Bird(path.join("sprites", "{}-{}.png"),
-                      COLOR, (200, 300))
+            COLOR, (200, 300))
 
 # Pipes
 pipes = []
@@ -74,7 +74,7 @@ def reset_game():
 
     pygame.mixer.music.play(-1)
     BIRD.rect.topleft = (200, 300)
-    BIRD.times = 0  
+    BIRD.times = 0
 
     return False, 0, 70, False
 
@@ -109,7 +109,7 @@ def create_pipes(pipe_counter, pipe_delay):
         pipe_counter = 0
     else:
         pipe_counter += 1
-    
+
     return pipe_counter
 
 
@@ -130,14 +130,14 @@ def draw(game_over, score, ready, woohoo, action=False) -> bool:
 
         # Display bird
         BIRD.draw(WIN, game_over)
-    
+
     # Display ground
     GROUND.draw(WIN, game_over or not ready)
     GROUND.check_scroll()
 
     if not ready:
         WIN.blit(MENU, (WIDTH/2 - 150, HEIGHT/2 - 230))
-    
+
     if game_over:
 
         # Update score file if player makes a new record
@@ -150,10 +150,10 @@ def draw(game_over, score, ready, woohoo, action=False) -> bool:
                     mkdir("score")
                 with open(path.join("score", "high.txt"), mode="w") as score_file:
                     score_file.write(str(score))
-        
+
         WIN.blit(GAME_OVER_IMG, (WIDTH/2 - 96, HEIGHT/2 - 100))
         action = BUTTON.draw(WIN)
-        
+
     pygame.display.update()
     CLOCK.tick(FPS)
     return action
@@ -183,19 +183,19 @@ def main():
     ready = False
     game_on = True
     while game_on:
-        
+
         # Create and draw pipes
         if not game_over and ready:
             pipe_counter = create_pipes(pipe_counter, pipe_delay)
-        
+
         # Check it crossed a pipe
         if len(pipes) > 0:
             if BIRD.rect.left > pipes[0].rect.left \
-			   and BIRD.rect.right < pipes[0].rect.right \
-			   and pipe_crossed == False:
-               
-               pipe_crossed = True
-        
+                    and BIRD.rect.right < pipes[0].rect.right \
+                    and pipe_crossed == False:
+
+                pipe_crossed = True
+
             # Increase score if passed a pipe
             if pipe_crossed == True:
                 if BIRD.rect.left > pipes[0].rect.right:
@@ -206,7 +206,7 @@ def main():
                         score_gained = 0
                         GROUND.__class__.__base__.scroll_speed += 0.05
                         pipe_delay -= 0.3
-                    
+
                     if score > high_score:
                         high_score = score
                         if not woohoo:
@@ -216,7 +216,7 @@ def main():
                             SCORE_SCOUND.play()
                     else:
                         SCORE_SCOUND.play()
-                    
+
                     pipe_crossed = False
 
         if len(pipes) > 0:
@@ -224,8 +224,8 @@ def main():
             # Check for collisions
             for pipe in pipes:
                 if BIRD.rect.colliderect(pipe.rect) \
-                or BIRD.rect.bottom >= 490 \
-                or BIRD.rect.top <= 0:
+                        or BIRD.rect.bottom >= 490 \
+                        or BIRD.rect.top <= 0:
                     game_over = True
                     GROUND.__class__.__base__.scroll_speed = 4
                     pygame.mixer.music.stop()
@@ -234,23 +234,22 @@ def main():
             # Delete pipes that crossed the window
             if pipes[0].rect.right < 0:
                 del pipes[0]
-            
+
         # Handle events
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
                 game_on = False
                 pygame.quit()
-            
+
             if (event.type == pygame.MOUSEBUTTONUP or event.type == pygame.KEYUP) and not game_over:
                 BIRD.clicked = True
-            
+
             if (event.type == pygame.MOUSEBUTTONUP or event.type == pygame.KEYUP) and not game_over \
-                and not ready:
+                    and not ready:
                 ready = True
                 BIRD.flying = True
 
-        
         # Display the game
         if draw(game_over, score, ready, woohoo):
             game_over, score, pipe_delay, woohoo = reset_game()
